@@ -17,7 +17,7 @@ public class ChatClient extends Frame{
     TextField  tf = new TextField();
     TextArea  ta = new TextArea();
     Socket socket =null;
-
+    DataOutputStream dos = null;
     public static void main(String[] args) {
         new ChatClient().lauchFrame();
     }
@@ -27,17 +27,19 @@ public class ChatClient extends Frame{
         this.setSize(300,300);
         this.setVisible(true);
         add(tf,BorderLayout.SOUTH);
-        pack();
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                disConnect();
                 super.windowClosing(e);
                 System.exit(0);
             }
         });
         tf.addActionListener(new TFListener());
         add(ta,BorderLayout.NORTH);
+        pack();
         setVisible(true);
+
         connect();
     }
 
@@ -50,10 +52,9 @@ public class ChatClient extends Frame{
             tf.setText("");
 
             try {
-                DataOutputStream dos =  new DataOutputStream(socket.getOutputStream());
                 dos.writeUTF(text);
                 dos.flush();
-                dos.close();
+//                dos.close();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -61,8 +62,18 @@ public class ChatClient extends Frame{
     }
 
     public void connect(){
+
         try {
             socket = new Socket("127.0.0.1",8888);
+            dos =  new DataOutputStream(socket.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void disConnect() {
+        try {
+            dos.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
