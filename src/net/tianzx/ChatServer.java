@@ -1,5 +1,6 @@
 package net.tianzx;
 
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -14,7 +15,10 @@ public class ChatServer {
             ServerSocket serverSocket = new ServerSocket(8888);
             while (true){
                 Socket socket = serverSocket.accept();
-                System.err.print("a client connected");
+                System.err.println("a client connected");
+                DataInputStream dis = new DataInputStream(socket.getInputStream());
+                System.err.println(dis.readUTF());
+                dis.close();
             }
         } catch (IOException e) {
             e.printStackTrace();

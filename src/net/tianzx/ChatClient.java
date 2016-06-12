@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -15,6 +16,7 @@ public class ChatClient extends Frame{
 
     TextField  tf = new TextField();
     TextArea  ta = new TextArea();
+    Socket socket =null;
 
     public static void main(String[] args) {
         new ChatClient().lauchFrame();
@@ -45,12 +47,22 @@ public class ChatClient extends Frame{
         public void actionPerformed(ActionEvent e) {
             String text = tf.getText().trim();
             ta.setText(text);
+            tf.setText("");
+
+            try {
+                DataOutputStream dos =  new DataOutputStream(socket.getOutputStream());
+                dos.writeUTF(text);
+                dos.flush();
+                dos.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
     public void connect(){
         try {
-            Socket socket = new Socket("127.0.0.1",8888);
+            socket = new Socket("127.0.0.1",8888);
         } catch (IOException e) {
             e.printStackTrace();
         }
