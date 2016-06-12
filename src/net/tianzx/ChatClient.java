@@ -1,6 +1,8 @@
 package net.tianzx;
 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * Created by tianzx on 2016/6/11.
@@ -20,6 +22,13 @@ public class ChatClient extends Frame{
         this.setVisible(true);
         add(tf,BorderLayout.SOUTH);
         pack();
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                System.exit(0);
+            }
+        });
         add(ta,BorderLayout.NORTH);
     }
 }
